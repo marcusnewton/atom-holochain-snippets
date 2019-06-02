@@ -1,4 +1,4 @@
-# holochain-snippets
+# atom-holochain-snippets
 
 Atom package for Holochain snippets (rust-hdk)
 
