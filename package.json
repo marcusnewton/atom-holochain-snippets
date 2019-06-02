@@ -1,0 +1,23 @@
+{
+  "name": "holochain-snippets",
+  "version": "0.0.0",
+  "description": "Atom package containing snippets for the Rust version of the Holochain development kit (rust-hdk)",
+  "keywords": [
+    "atom",
+    "holochain",
+    "holochain-snippets"
+  ],
+  "author": {
+    "name": "Marcus Newton",
+    "url": "https://github.com/marcusnewton1"
+  },
+  "activationCommands": {
+    "atom-workspace": "holochain-snippets:toggle"
+  },
+  "repository": "https://github.com/marcusnewton1/holochain-snippets",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0"
+  },
+  "dependencies": {}
+}

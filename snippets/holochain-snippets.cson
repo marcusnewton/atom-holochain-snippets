@@ -1,0 +1,235 @@
+'.source.rust':
+  'lib Crates Preamble (default)':
+    'prefix': 'hcpre'
+    'body': """
+      #![feature(try_from)]
+      #[macro_use]
+      extern crate hdk;
+      extern crate serde;
+      #[macro_use]
+      extern crate serde_derive;
+      extern crate serde_json;
+      #[macro_use]
+      extern crate holochain_core_types_derive;
+
+      use hdk::{
+          entry_definition::ValidatingEntryType,
+          error::ZomeApiResult,
+      };
+      use hdk::holochain_core_types::{
+          cas::content::Address,
+          entry::Entry,
+          dna::entry_types::Sharing,
+          error::HolochainError,
+          json::JsonString,
+          validation::EntryValidationData
+      };
+      """
+
+  'mod Crates Preamble (default)':
+    'prefix': 'hcmod'
+    'body': """
+      use hdk::{
+          self,
+          error::{ZomeApiError, ZomeApiResult},
+          holochain_core_types::{
+              cas::content::Address,
+              dna::capabilities::CapabilityRequest,
+              entry::{cap_entries::CapabilityType, entry_type::EntryType, Entry},
+              error::HolochainError,
+              json::JsonString,
+              signature::{Provenance, Signature},
+          },
+          holochain_wasm_utils::api_serialization::{
+              commit_entry::CommitEntryOptions,
+              get_entry::{
+                  EntryHistory, GetEntryOptions, GetEntryResult, GetEntryResultType, StatusRequestKind,
+              },
+              get_links::{GetLinksOptions, GetLinksResult},
+              QueryArgsOptions, QueryResult,
+          },
+          AGENT_ADDRESS, AGENT_ID_STR, CAPABILITY_REQ, DNA_ADDRESS, DNA_NAME, PROPERTIES, PUBLIC_TOKEN,
+      };
+      """
+
+  'Zome - define_zome! macro':
+    'prefix': 'hczome'
+    'body': """
+      define_zome! {
+          entries: [
+              $1
+          ]
+
+          genesis: || {
+              Ok(())
+          }
+
+          functions: [
+
+          ]
+
+          traits: {
+              hc_public [
+
+              ]
+          }
+      }
+      """
+
+  'Definition':
+    'prefix': 'hcdef'
+    'body': """
+      pub fn definition() -> ValidatingEntryType {
+          $1
+      }
+      """
+
+  'Zome Entry':
+    'prefix': 'hcentry'
+    'body': """
+      entry!(
+          name: ${1:"myentry"},
+          description: ${2:"description"},
+          sharing: Sharing::${3:Public},
+
+          validation_package: || {
+              hdk::ValidationPackageDefinition::${4:Entry}
+          },
+
+          validation: |_validation_data: ValidationData<${5:MyEntryType}>| {
+              ${6:Ok(())}
+          },
+
+          links: [
+              $7
+          ]
+      )
+      """
+
+  'Function':
+    'prefix': 'hcfun'
+    'body': """
+      ${1:my_function_name}: {
+          inputs: | $2 |,
+          outputs: | $3 |,
+          handler: handle_${1:my_function_name}
+      }
+      """
+
+  'Links To':
+    'prefix': 'hcto'
+    'body': """
+      to!(
+          ${1:"entry_name"},
+          link_type: ${2:"my_link_type"},
+          validation_package: || {
+              hdk::ValidationPackageDefinition::${3:ChainFull}
+          },
+          validation: | _validation_data: hdk::LinkValidationData | {
+              ${4:Ok(())}
+          }
+      )
+      """
+
+  'Links From (e.g. agent)':
+    'prefix': 'hcfrom'
+    'body': """
+      from!(
+          ${1:"%agent_id"},
+          link_type: ${2:"my_link_type"},
+          validation_package: || {
+              hdk::ValidationPackageDefinition::${3:ChainFull}
+          },
+          validation: | _validation_data: hdk::LinkValidationData | {
+              ${4:Ok(())}
+          }
+      )
+      """
+
+  'Link':
+    'prefix': 'hclink'
+    'body': """
+      link!(
+          hdk::LinkDirection::${1:From},
+          ${2:"%agent_id"},
+          link_type: ${3:"my_link_type"},
+          validation_package: || {
+              hdk::ValidationPackageDefinition::${4:ChainFull}
+          },
+          validation: | _validation_data: hdk::LinkValidationData | {
+              ${5:Ok(())}
+          }
+      )
+      """
+
+  'Entry Struct':
+    'prefix': 'hcstruct'
+    'body': """
+      #[derive(Serialize, Deserialize, Debug, DefaultJson)]
+      struct ${1:MyEntryType} {
+          ${2:field}: String
+      }
+
+      impl ${1:MyEntryType} {
+          pub fn new(content: &str, date_created: &str) -> ${1:MyEntryType} {
+              ${1:MyEntryType} {
+                  ${2:field}: content.to_owned(),
+                  date_created: date_created.to_owned(),
+              }
+          }
+
+          pub fn ${2:field}(&self) -> String {
+              self.${2:field}.clone()
+          }
+
+          pub fn date_created(&self) -> String {
+              self.date_created.clone()
+          }
+      }
+      """
+
+  'Create an entry':
+    'prefix': 'hccreate'
+    'body': """
+      fn handle_create_${1:my_entry}(${2:content}: String) -> ZomeApiResult<Address> {
+          let address = hdk::commit_entry(Entry::App("${1:my_entry}".into(), ${3:MyEntryType}::new(&${2:content}, "now").into()))?;
+
+          Ok(address)
+      }
+      """
+
+  'Get an entry':
+    'prefix': 'hcget'
+    'body': """
+      fn handle_get_${1:my_entry}(${1:my_entry}_address: Address) -> ZomeApiResult<Option<Entry>> {
+          hdk::get_entry(&${1:my_entry}_address)
+      }
+      """
+
+  'Update an entry':
+    'prefix': 'hcupdate'
+    'body': """
+      fn handle_update_${1:my_entry}(${1:my_entry}_address: Address, new_content: ${3:String}) -> ZomeApiResult<Address> {
+          let old_entry = hdk::get_entry(&${1:my_entry}_address)?;
+
+          hdk::update_entry(updated_${1:my_entry}, &${1:my_entry}_address)
+      }
+      """
+
+  'Delete an entry':
+    'prefix': 'hcdelete'
+    'body': """
+      fn handle_delete_${1:my_entry}(${1:my_entry}_address: Address) -> ZomeApiResult<Address> {
+          hdk::get_entry(&${1:my_entry}_address)?;
+
+          hdk::remove_entry(&${1:my_entry}_address)
+      }
+      """
+
+  'Send':
+    'prefix': 'hcsend'
+    'body': """
+      fn handle_send_${1:my_payload}(to_agent: Address, payload: ${2:String}) -> ZomeApiResult<String> {
+          hdk::send(to_agent, payload, ${3:60000}.into())
+      }
+      """
