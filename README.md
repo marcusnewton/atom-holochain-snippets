@@ -1,5 +1,22 @@
-# holochain-snippets package
+# holochain-snippets
 
-A short description of your package.
+Atom package for Holochain snippets (rust-hdk)
 
-![A screenshot of your package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)
+Snippets:
+
+| snippet | result |
+| ---     | ---    |
+| hclib | Default crate imports for main lib.rs file |
+| hcmod | Default crate imports for modules where you define application logic |
+| hczome | define_zome! macro |
+| hcdef | definition() |
+| hcentry | entry! macro |
+| hclink | link! macro |
+| hcfrom | from! macro |
+| hcto | to! macro |
+| hcstruct | new entry struct/impl |
+| hccreate | basic create entry function |
+| hcget | basic get entry function |
+| hcupdate | basic update entry function |
+| hcdelete | basic delete entry function |
+| hcsend | basic send payload function |
