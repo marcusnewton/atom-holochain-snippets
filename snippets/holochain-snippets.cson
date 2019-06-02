@@ -162,7 +162,7 @@
       )
       """
 
-  'Entry Struct':
+  'Entry Struct + Impl':
     'prefix': 'hcstruct'
     'body': """
       #[derive(Serialize, Deserialize, Debug, DefaultJson)]
@@ -171,19 +171,14 @@
       }
 
       impl ${1:MyEntryType} {
-          pub fn new(${2:my_field}: &str, date_created: &str) -> ${1:MyEntryType} {
+          pub fn new(${2:my_field}: &str) -> ${1:MyEntryType} {
               ${1:MyEntryType} {
-                  ${2:my_field}: ${2:my_field}.to_owned(),
-                  date_created: date_created.to_owned(),
+                  ${2:my_field}: ${2:my_field}.to_owned()
               }
           }
 
           pub fn ${2:my_field}(&self) -> String {
               self.${2:my_field}.clone()
-          }
-
-          pub fn date_created(&self) -> String {
-              self.date_created.clone()
           }
       }
       """
