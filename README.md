@@ -87,12 +87,15 @@ define_zome! {
     entries: [
         $1
     ]
+    
     genesis: || {
         Ok(())
     }
+    
     functions: [
     
     ]
+    
     traits: {
         hc_public [
         
@@ -191,12 +194,14 @@ new entry struct + impl
 struct ${1:MyEntryType} {
     ${2:my_field}: String
 }
+
 impl ${1:MyEntryType} {
     pub fn new(${2:my_field}: &str) -> ${1:MyEntryType} {
         ${1:MyEntryType} {
             ${2:my_field}: ${2:my_field}.to_owned()
         }
     }
+    
     pub fn ${2:my_field}(&self) -> String {
         self.${2:my_field}.clone()
     }
