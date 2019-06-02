@@ -1,6 +1,6 @@
 # atom-holochain-snippets
 
-Atom package for Holochain snippets (rust-hdk)
+Atom package for Holochain snippets (hdk-rust)
 
 [Install](https://atom.io/packages/atom-holochain-snippets)
 
