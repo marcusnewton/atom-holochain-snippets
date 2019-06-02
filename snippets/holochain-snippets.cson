@@ -210,7 +210,10 @@
     'prefix': 'hcupdate'
     'body': """
       fn handle_update_${1:my_entry}(${1:my_entry}_address: Address, new_content: ${3:String}) -> ZomeApiResult<Address> {
-          let old_entry = hdk::get_entry(&${1:my_entry}_address)?;
+          let updated_${1:my_entry} = Entry::App(
+              "${1:my_entry}".into(),
+              ${2:MyEntryType}::new(&new_content).into(),
+          );
 
           hdk::update_entry(updated_${1:my_entry}, &${1:my_entry}_address)
       }
