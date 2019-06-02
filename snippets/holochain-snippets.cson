@@ -1,6 +1,6 @@
 '.source.rust':
   'lib Crates Preamble (default)':
-    'prefix': 'hcpre'
+    'prefix': 'hclib'
     'body': """
       #![feature(try_from)]
       #[macro_use]
