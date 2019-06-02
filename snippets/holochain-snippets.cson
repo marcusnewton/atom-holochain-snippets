@@ -96,7 +96,7 @@
               hdk::ValidationPackageDefinition::${4:Entry}
           },
 
-          validation: |_validation_data: ValidationData<${5:MyEntryType}>| {
+          validation: |_validation_data: ValidationData<${5:EntryType}>| {
               ${6:Ok(())}
           },
 
@@ -167,19 +167,19 @@
     'body': """
       #[derive(Serialize, Deserialize, Debug, DefaultJson)]
       struct ${1:MyEntryType} {
-          ${2:field}: String
+          ${2:my_field}: String
       }
 
       impl ${1:MyEntryType} {
           pub fn new(content: &str, date_created: &str) -> ${1:MyEntryType} {
               ${1:MyEntryType} {
-                  ${2:field}: content.to_owned(),
+                  ${2:my_field}: ${2:my_field}.to_owned(),
                   date_created: date_created.to_owned(),
               }
           }
 
-          pub fn ${2:field}(&self) -> String {
-              self.${2:field}.clone()
+          pub fn ${2:my_field}(&self) -> String {
+              self.${2:my_field}.clone()
           }
 
           pub fn date_created(&self) -> String {
@@ -191,8 +191,8 @@
   'Create an entry':
     'prefix': 'hccreate'
     'body': """
-      fn handle_create_${1:my_entry}(${2:content}: String) -> ZomeApiResult<Address> {
-          let address = hdk::commit_entry(Entry::App("${1:my_entry}".into(), ${3:MyEntryType}::new(&${2:content}, "now").into()))?;
+      fn handle_create_${1:my_entry}(${2:my_field}: String) -> ZomeApiResult<Address> {
+          let address = hdk::commit_entry(Entry::App("${1:my_entry}".into(), ${3:MyEntryType}::new(&${2:my_field}, "now").into()))?;
 
           Ok(address)
       }
