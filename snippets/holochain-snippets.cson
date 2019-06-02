@@ -171,7 +171,7 @@
       }
 
       impl ${1:MyEntryType} {
-          pub fn new(content: &str, date_created: &str) -> ${1:MyEntryType} {
+          pub fn new(${2:my_field}: &str, date_created: &str) -> ${1:MyEntryType} {
               ${1:MyEntryType} {
                   ${2:my_field}: ${2:my_field}.to_owned(),
                   date_created: date_created.to_owned(),
