@@ -14,7 +14,7 @@
 
       use hdk::{
           entry_definition::ValidatingEntryType,
-          error::ZomeApiResult,
+          error::{ZomeApiError, ZomeApiResult},
       };
       use hdk::holochain_core_types::{
           cas::content::Address,
@@ -22,7 +22,7 @@
           dna::entry_types::Sharing,
           error::HolochainError,
           json::JsonString,
-          validation::EntryValidationData
+          validation::{EntryValidationData, LinkValidationData}
       };
       """
 
@@ -79,8 +79,24 @@
   'Definition':
     'prefix': 'hcdef'
     'body': """
-      pub fn definition() -> ValidatingEntryType {
-          $1
+      pub fn entryDefinition() -> ValidatingEntryType {
+          entry!(
+              name: ${1:"myentry"},
+              description: ${2:"description"},
+              sharing: Sharing::${3:Public},
+
+              validation_package: || {
+                  hdk::ValidationPackageDefinition::${4:Entry}
+              },
+
+              validation: |_validation_data: EntryValidationData<${5:EntryType}>| {
+                  ${6:Ok(())}
+              },
+
+              links: [
+                  $7
+              ]
+          )
       }
       """
 
@@ -96,7 +112,7 @@
               hdk::ValidationPackageDefinition::${4:Entry}
           },
 
-          validation: |_validation_data: ValidationData<${5:EntryType}>| {
+          validation: |_validation_data: EntryValidationData<${5:EntryType}>| {
               ${6:Ok(())}
           },
 
@@ -125,7 +141,7 @@
           validation_package: || {
               hdk::ValidationPackageDefinition::${3:ChainFull}
           },
-          validation: | _validation_data: hdk::LinkValidationData | {
+          validation: | _validation_data: LinkValidationData | {
               ${4:Ok(())}
           }
       )
@@ -140,7 +156,7 @@
           validation_package: || {
               hdk::ValidationPackageDefinition::${3:ChainFull}
           },
-          validation: | _validation_data: hdk::LinkValidationData | {
+          validation: | _validation_data: LinkValidationData | {
               ${4:Ok(())}
           }
       )
@@ -156,7 +172,7 @@
           validation_package: || {
               hdk::ValidationPackageDefinition::${4:ChainFull}
           },
-          validation: | _validation_data: hdk::LinkValidationData | {
+          validation: | _validation_data: LinkValidationData | {
               ${5:Ok(())}
           }
       )
@@ -167,11 +183,11 @@
     'body': """
       #[derive(Serialize, Deserialize, Debug, DefaultJson)]
       struct ${1:MyEntryType} {
-          ${2:my_field}: String
+          ${2:my_field}: ${3:String}
       }
 
       impl ${1:MyEntryType} {
-          pub fn new(${2:my_field}: &str) -> ${1:MyEntryType} {
+          pub fn new(${2:my_field}: ${4:&str}) -> ${1:MyEntryType} {
               ${1:MyEntryType} {
                   ${2:my_field}: ${2:my_field}.to_owned()
               }
