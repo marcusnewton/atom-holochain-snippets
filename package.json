@@ -1,6 +1,6 @@
 {
   "name": "atom-holochain-snippets",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Atom package containing snippets for the Rust version of the Holochain development kit (rust-hdk)",
   "keywords": [
     "atom",
