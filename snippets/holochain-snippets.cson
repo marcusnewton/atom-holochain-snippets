@@ -180,8 +180,8 @@
   'Entry Struct + Impl':
     'prefix': 'hcstruct'
     'body': """
-      #[derive(Serialize, Deserialize, Debug, DefaultJson)]
-      struct ${1:MyEntryType} {
+      #[derive(Serialize, Deserialize, Debug, DefaultJson, Clone)]
+      pub struct ${1:MyEntryType} {
           ${2:my_field}: ${3:String}
       }
 
@@ -192,7 +192,7 @@
               }
           }
 
-          pub fn ${2:my_field}(&self) -> String {
+          pub fn ${2:my_field}(&self) -> ${3:String} {
               self.${2:my_field}.clone()
           }
       }
@@ -202,7 +202,8 @@
     'prefix': 'hccreate'
     'body': """
       fn handle_create_${1:my_entry}(${2:my_field}: String) -> ZomeApiResult<Address> {
-          let address = hdk::commit_entry(Entry::App("${1:my_entry}".into(), ${3:MyEntryType}::new(&${2:my_field}, "now").into()))?;
+          let entry = Entry::App("${1:my_entry}".into(), ${3:MyEntryType}::new(&${2:my_field}).into());
+          let address = hdk::commit_entry(&entry)?;
 
           Ok(address)
       }
