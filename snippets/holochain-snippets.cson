@@ -21,8 +21,7 @@
           entry::Entry,
           dna::entry_types::Sharing,
           error::HolochainError,
-          json::JsonString,
-          validation::{EntryValidationData, LinkValidationData}
+          json::JsonString
       };
       """
 
@@ -89,7 +88,7 @@
                   hdk::ValidationPackageDefinition::${4:Entry}
               },
 
-              validation: |_validation_data: EntryValidationData<${5:EntryType}>| {
+              validation: |_validation_data: hdk::EntryValidationData<${5:EntryType}>| {
                   ${6:Ok(())}
               },
 
@@ -112,7 +111,7 @@
               hdk::ValidationPackageDefinition::${4:Entry}
           },
 
-          validation: |_validation_data: EntryValidationData<${5:EntryType}>| {
+          validation: |_validation_data: hdk::EntryValidationData<${5:EntryType}>| {
               ${6:Ok(())}
           },
 
@@ -141,7 +140,7 @@
           validation_package: || {
               hdk::ValidationPackageDefinition::${3:ChainFull}
           },
-          validation: | _validation_data: LinkValidationData | {
+          validation: | _validation_data: hdk::LinkValidationData | {
               ${4:Ok(())}
           }
       )
@@ -156,7 +155,7 @@
           validation_package: || {
               hdk::ValidationPackageDefinition::${3:ChainFull}
           },
-          validation: | _validation_data: LinkValidationData | {
+          validation: | _validation_data: hdk::LinkValidationData | {
               ${4:Ok(())}
           }
       )
@@ -172,7 +171,7 @@
           validation_package: || {
               hdk::ValidationPackageDefinition::${4:ChainFull}
           },
-          validation: | _validation_data: LinkValidationData | {
+          validation: | _validation_data: hdk::LinkValidationData | {
               ${5:Ok(())}
           }
       )
